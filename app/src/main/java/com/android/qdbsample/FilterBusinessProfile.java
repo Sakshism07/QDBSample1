@@ -7,6 +7,8 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -29,8 +31,8 @@ import java.util.ArrayList;
 public class FilterBusinessProfile extends Activity implements View.OnClickListener {
 
     String urlFilterList = "http://api.smesconnect.com/api/web/index.php/v1/business/industry-list?language=ar";
-    ArrayList<String> arrayList;
-    ListView listviewFilter;
+    ArrayList<ModelFilterList> arrayList;
+    RecyclerView listviewFilter;
     Button btnSubmit;
 
     @Override
@@ -50,6 +52,8 @@ public class FilterBusinessProfile extends Activity implements View.OnClickListe
         listviewFilter = findViewById(R.id.listviewFilter);
         btnSubmit = findViewById(R.id.btnSubmit);
         arrayList = new ArrayList<>();
+
+        listviewFilter.setLayoutManager(new LinearLayoutManager(FilterBusinessProfile.this));
     }
 
     @Override
@@ -101,7 +105,9 @@ public class FilterBusinessProfile extends Activity implements View.OnClickListe
 
                     JSONObject jsonObject3 = jsonArray.getJSONObject(i);
                     name = jsonObject3.getString("name_en");
-                    arrayList.add(name);
+                    ModelFilterList objModelFilterList = new ModelFilterList(name, false);
+                    arrayList.add(objModelFilterList);
+
                     Log.d("Industry List", name);
                 }
 

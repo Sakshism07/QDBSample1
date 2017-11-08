@@ -31,7 +31,7 @@ import java.util.ArrayList;
 public class FilterBusinessProfile extends Activity implements View.OnClickListener {
 
     String urlFilterList = "http://api.smesconnect.com/api/web/index.php/v1/business/industry-list?language=ar";
-    ArrayList<ModelFilterList> arrayList;
+    protected static ArrayList<ModelFilterList> arrayList;
     RecyclerView listviewFilter;
     Button btnSubmit;
 
@@ -75,7 +75,6 @@ public class FilterBusinessProfile extends Activity implements View.OnClickListe
 
             progressDialog.setMessage("Loading...");
             progressDialog.show();
-            //obj.showProgressDialog();
             super.onPreExecute();
         }
 
@@ -133,7 +132,7 @@ public class FilterBusinessProfile extends Activity implements View.OnClickListe
 
             progressDialog.dismiss();
             //obj.dismissProgressDialog();
-            FilterListAdapter filterListAdapter = new FilterListAdapter(arrayList);
+            FilterListAdapter filterListAdapter = new FilterListAdapter();
             listviewFilter.setAdapter(filterListAdapter);
             super.onPostExecute(s);
         }

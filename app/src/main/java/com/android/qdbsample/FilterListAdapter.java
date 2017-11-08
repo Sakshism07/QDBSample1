@@ -16,16 +16,6 @@ import java.util.ArrayList;
  */
 
 public class FilterListAdapter extends RecyclerView.Adapter<FilterListAdapter.MyViewHolder> {
-
-
-    ArrayList<ModelFilterList> arrayList = new ArrayList<>();
-
-
-    public FilterListAdapter(ArrayList<ModelFilterList> arrayList) {
-        this.arrayList = arrayList;
-        setHasStableIds(true);
-    }
-
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
@@ -35,13 +25,25 @@ public class FilterListAdapter extends RecyclerView.Adapter<FilterListAdapter.My
     }
 
     @Override
-    public void onBindViewHolder(MyViewHolder holder, int position) {
+    public void onBindViewHolder(MyViewHolder holder, final int position) {
 
-        ModelFilterList obj = arrayList.get(position);
+        final ModelFilterList obj = FilterBusinessProfile.arrayList.get(position);
         holder.tvFilterNames.setText(obj.getName());
+        holder.checkBox.setOnCheckedChangeListener(null);
         holder.checkBox.setChecked(obj.getChecked());
+        holder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if (b) {
+                    obj.setChecked(true);
+                } else if (!b) {
+                    obj.setChecked(false);
+                }
+            }
+        });
 
     }
+
 
     @Override
     public long getItemId(int position) {
@@ -55,7 +57,7 @@ public class FilterListAdapter extends RecyclerView.Adapter<FilterListAdapter.My
 
     @Override
     public int getItemCount() {
-        return arrayList.size();
+        return FilterBusinessProfile.arrayList.size();
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
@@ -70,72 +72,5 @@ public class FilterListAdapter extends RecyclerView.Adapter<FilterListAdapter.My
             tvFilterNames = itemView.findViewById(R.id.tvFilterNames);
         }
     }
-//
-//    @Override
-//    public int getCount() {
-//        return arrayList.size();
-//    }
-//
-//    @Override
-//    public Object getItem(int position) {
-//        return arrayList.get(position);
-//    }
-//
-//    @Override
-//    public long getItemId(int position) {
-//        return position;
-//    }
-//
-//    private class ViewHolder {
-//        TextView tvFilterNames;
-//        CheckBox checkBox;
-//    }
-//
-//    @Override
-//    public View getView(int position, View convertView, ViewGroup parent) {
-//
-//        final ViewHolder viewHolder;
-//        String text = null;
-//
-//        if (convertView == null) {
-//
-//            LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-//            convertView = inflater.inflate(R.layout.filter_listsitem, parent, false);
-//            viewHolder = new ViewHolder();
-//
-//            text = arrayList.get(position);
-//
-//            viewHolder.tvFilterNames = convertView.findViewById(R.id.tvFilterNames);
-//            viewHolder.checkBox = convertView.findViewById(R.id.checkbox);
-//
-//            convertView.setTag(viewHolder);
-////
-////            view.setTag(convertView);
-////
-////            tvFilterNames.setText(text);
-//            viewHolder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-//                @Override
-//                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-//
-//                    int position = (Integer) buttonView.getTag();
-//
-//                    //.get(position).setChecked(buttonView.isChecked());
-//
-//                }
-//            });
-//
-//        } else {
-//            viewHolder = (ViewHolder) convertView.getTag();
-//        }
-//
-//        viewHolder.tvFilterNames.setText(text);
-//        viewHolder.checkBox.setTag(position);
-//        return convertView;
-//    }
-//
-//    @Override
-//    public int getItemViewType(int position) {
-//        return position;
-//
-//    }
+
 }

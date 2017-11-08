@@ -25,6 +25,8 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+import retrofit2.http.GET;
+
 /**
  * Created by Android on 04-Nov-17.
  */
@@ -33,23 +35,32 @@ public class BusinessProfile extends Activity implements View.OnClickListener {
 
     SharedPreferences sharedPreferences;
     ArrayList<GetSet> arrayList;
+    ArrayList<GetSet> arrayListCheckedFilter;
     String token, message;
     Button btnFilter;
     Boolean errorStatus;
     int index = 0;
+    int getALHint;
     RecyclerView recyclerView;
     String urlBusinessProfile = "http://api.smesconnect.com/api/web/index.php/v1/business/list?language=en&offset=0&industry_ids=";
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setTitle("Business Profile");
         setContentView(R.layout.activity_businessprofile);
 
         init();
         bindOnClicktoComponents();
-
+        recyclerView.setLayoutManager(new GridLayoutManager(BusinessProfile.this, 2));
         recyclerView.setHasFixedSize(true);
+
+
         new FetchBusinessProfile().execute();
+
+
+
+
 
     }
 
@@ -75,7 +86,7 @@ public class BusinessProfile extends Activity implements View.OnClickListener {
     public class FetchBusinessProfile extends AsyncTask<Void, Void, String> {
 
         String name;
-        String imgurl;
+        String imgurl, industryid;
         ProgressDialog progressDialog = new ProgressDialog(BusinessProfile.this);
 
         ///ProgressDialogActivity obj;// = new ProgressDialogActivity();
@@ -117,8 +128,10 @@ public class BusinessProfile extends Activity implements View.OnClickListener {
                     JSONObject jsonObject3 = jsonArray.getJSONObject(i);
                     name = jsonObject3.getString("name");
                     imgurl = jsonObject3.getString("logo_image");
+                    industryid = jsonObject3.getString("industry_id");
+                    Log.d("ccccc7",industryid);
 
-                    GetSet getSet = new GetSet(name, imgurl);
+                    GetSet getSet = new GetSet(name, imgurl,industryid);
                     Log.d("NAME", name);
                     arrayList.add(getSet);
                     index++;
@@ -148,9 +161,40 @@ public class BusinessProfile extends Activity implements View.OnClickListener {
 
             progressDialog.dismiss();
             //obj.dismissProgressDialog();
-            DataAdapterRecyclerView adapterRecyclerView = new DataAdapterRecyclerView(arrayList);
-            recyclerView.setLayoutManager(new GridLayoutManager(BusinessProfile.this, 2));
-            recyclerView.setAdapter(adapterRecyclerView);
+
+            getALHint = getIntent().getIntExtra("Checked",0);
+            Log.d("ccccc3",arrayList.size()+"");
+            if(getALHint == 1){
+                for(int i=0 ; i<arrayList.size() ; i++){
+
+                    arrayListCheckedFilter = new ArrayList<>();
+
+                    for(int j=0 ; j< FilterBusinessProfile.arrayListFilter.size(); j++){
+
+                        GetSet getSet = arrayList.get(i);
+                        ModelFilterList modelFilterList = FilterBusinessProfile.arrayListFilter.get(j);
+
+                        String Indid1 = getSet.getIndustryid()+"";
+                        String Indid2 = modelFilterList.getIndustryid()+"";
+                        Log.d("ccccc2",Indid2);
+                        Log.d("ccccc",Indid1);
+
+
+
+                        if(Indid1.equalsIgnoreCase(Indid2)){
+                            arrayListCheckedFilter.add(getSet);
+                            DataAdapterRecyclerView adapterRecyclerView = new DataAdapterRecyclerView(arrayListCheckedFilter);
+
+                            recyclerView.setAdapter(adapterRecyclerView);
+                        }
+
+                    }
+                }
+            }else {
+                DataAdapterRecyclerView adapterRecyclerView = new DataAdapterRecyclerView(arrayList);
+
+                recyclerView.setAdapter(adapterRecyclerView);
+            }
 
             //ArrayList<GetSet> showItemList = new ArrayList<>();
             // int endIndex = index + 6;

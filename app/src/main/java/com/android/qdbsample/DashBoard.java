@@ -51,6 +51,7 @@ public class DashBoard extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+      //
         setContentView(R.layout.activity_dashboard);
 
         init();
@@ -92,7 +93,9 @@ public class DashBoard extends AppCompatActivity
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
+                if (drawerLayout.isDrawerOpen(Gravity.RIGHT)) {
+                    drawerLayout.closeDrawer(Gravity.RIGHT);
+                }
                 if (position == 0) {
 
                     Log.d("MyProfile", String.valueOf(position));

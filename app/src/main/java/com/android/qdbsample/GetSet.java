@@ -5,11 +5,21 @@ package com.android.qdbsample;
  */
 
 public class GetSet {
-    String name,ingurl;
+    String name, ingurl;
+    String industryid;
 
-    public GetSet(String name, String ingurl) {
+    public GetSet(String name, String ingurl,String industryid) {
         this.name = name;
         this.ingurl = ingurl;
+        this.industryid = industryid;
+    }
+
+    public String getIndustryid() {
+        return industryid;
+    }
+
+    public void setIndustryid(String industryid) {
+        this.industryid = industryid;
     }
 
     public String getName() {

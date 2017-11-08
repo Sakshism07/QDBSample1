@@ -3,6 +3,7 @@ package com.android.qdbsample;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -32,6 +33,7 @@ public class FilterBusinessProfile extends Activity implements View.OnClickListe
 
     String urlFilterList = "http://api.smesconnect.com/api/web/index.php/v1/business/industry-list?language=ar";
     protected static ArrayList<ModelFilterList> arrayList;
+    protected static ArrayList<ModelFilterList> arrayListFilter;
     RecyclerView listviewFilter;
     Button btnSubmit;
 
@@ -39,6 +41,7 @@ public class FilterBusinessProfile extends Activity implements View.OnClickListe
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_filterlist);
+        setTitle("Industry List");
         init();
         bindOnClick();
         new FetchFilterList().execute();
@@ -58,15 +61,28 @@ public class FilterBusinessProfile extends Activity implements View.OnClickListe
 
     @Override
     public void onClick(View v) {
+        Intent intent = new Intent(FilterBusinessProfile.this,BusinessProfile.class);
         if (v.getId() == R.id.btnSubmit) {
 
+            arrayListFilter = new ArrayList<>();
+            for (int i = 0; i < arrayList.size(); i++) {
+                ModelFilterList objModelFilter = arrayList.get(i);
+                if (objModelFilter.isChecked) {
+                    arrayListFilter.add(objModelFilter);
+                    intent.putExtra("Checked", 1);
+                    Log.d("Checked name:", objModelFilter.getName());
+                }
+            }
+
+            finish();
+            startActivity(intent);
         }
     }
 
     public class FetchFilterList extends AsyncTask<Void, Void, String> {
 
         Boolean errorStatus = null;
-        String message, token, name;
+        String message, token, name, industry_id;
         SharedPreferences sharedPreferences;
         ProgressDialog progressDialog = new ProgressDialog(FilterBusinessProfile.this);
 
@@ -104,7 +120,8 @@ public class FilterBusinessProfile extends Activity implements View.OnClickListe
 
                     JSONObject jsonObject3 = jsonArray.getJSONObject(i);
                     name = jsonObject3.getString("name_en");
-                    ModelFilterList objModelFilterList = new ModelFilterList(name, false);
+                    industry_id = jsonObject3.getString("id");
+                    ModelFilterList objModelFilterList = new ModelFilterList(name, false, industry_id );
                     arrayList.add(objModelFilterList);
 
                     Log.d("Industry List", name);

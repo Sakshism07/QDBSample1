@@ -6,13 +6,24 @@ package com.android.qdbsample;
 
 public class ModelFilterList {
 
-    String name;
+    String name, industryid;
     Boolean isChecked;
 
-    public ModelFilterList(String name, Boolean isChecked) {
+
+    public ModelFilterList(String name, Boolean isChecked, String industryid) {
         this.name = name;
         this.isChecked = isChecked;
+        this.industryid = industryid;
     }
+
+    public String getIndustryid() {
+        return industryid;
+    }
+
+    public void setIndustryid(String industryid) {
+        this.industryid = industryid;
+    }
+
 
     public String getName() {
         return name;

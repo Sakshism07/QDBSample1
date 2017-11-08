@@ -8,6 +8,15 @@ public class Model_User {
 
     String strFirstName;
     String strLastName;
+    int indutryid;
+
+    public int getIndutryid() {
+        return indutryid;
+    }
+
+    public void setIndutryid(int indutryid) {
+        this.indutryid = indutryid;
+    }
 
     public String getStrFirstName() {
         return strFirstName;

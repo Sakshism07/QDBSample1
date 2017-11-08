@@ -32,18 +32,20 @@ public class FilterListAdapter extends RecyclerView.Adapter<FilterListAdapter.My
         holder.checkBox.setOnCheckedChangeListener(null);
         holder.checkBox.setChecked(obj.getChecked());
         holder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+
                 if (b) {
                     obj.setChecked(true);
                 } else if (!b) {
                     obj.setChecked(false);
                 }
+
             }
         });
 
     }
-
 
     @Override
     public long getItemId(int position) {
